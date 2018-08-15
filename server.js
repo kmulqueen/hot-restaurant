@@ -3,6 +3,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var path = require("path");
+var mysql = require("mysql");
 
 // Sets up the Express App
 // =============================================================
@@ -41,4 +42,26 @@ app.get("/api/waitlist", function (req, res) {
 
 app.listen(PORT, function () {
   console.log("App listening on PORT " + PORT);
+});
+
+
+//mysql starts here!
+var connection = mysql.createConnection({
+  host: "localhost",
+
+  // Your port; if not 3306
+  port: 3306,
+
+  // Your username
+  user: "root",
+
+  // Your password
+  password: "root",
+  database: "hot_restaurants"
+});
+
+connection.connect(function (err) {
+  if (err) throw err;
+  console.log("connected as id " + connection.threadId + "\n");
+  connection.end();
 });
