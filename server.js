@@ -45,23 +45,6 @@ app.listen(PORT, function () {
 });
 
 
-app.post("/api/reservations", function(req, res) {
-  // req.body hosts is equal to the JSON post sent from the user
-  // This works because of our body-parser middleware
-  var newReservation= req.body;
-
-  // Using a RegEx Pattern to remove spaces from newCharacter
-  // You can read more about RegEx Patterns later https://www.regexbuddy.com/regex.html
-  newReservation.routeName = newReservation.name.replace(/\s+/g, "").toLowerCase();
-
-  console.log(newReservation);
-
-  reservations.push(newReservation);
-
-  res.json(newReservation);
-});
-
-
 //mysql starts here!
 var connection = mysql.createConnection({
   host: "localhost",
@@ -80,6 +63,35 @@ var connection = mysql.createConnection({
 connection.connect(function (err) {
   if (err) throw err;
   console.log("connected as id " + connection.threadId + "\n");
-  connection.end();
+  // connection.end();
 });
 
+connection.query("SELECT count(*) AS count FROM reservations", function (err, res) {
+  if (err) throw err;
+  var resTableLength = (res[0].count);
+  if (resTableLength < 6) {
+    app.post("/api/reservations", function (req, res) {
+      var newReservation = req.body;
+      connection.query("INSERT INTO reservations SET ?", newReservation, function(err, res) {
+        if (err) throw err;
+        console.log("added reservation");
+      })
+      newReservation.routeName = newReservation.name.replace(/\s+/g, "").toLowerCase();
+      console.log(newReservation);
+      reservations.push(newReservation);
+      res.json(newReservation);
+    });
+  } else {
+    app.post("/api/waitlist", function (req, res) {
+      var newReservation = req.body;
+      connection.query("INSERT INTO wait_list SET ?", newReservation, function(err, res) {
+        if (err) throw err;
+        console.log("added reservation to wait list");
+      })
+      newReservation.routeName = newReservation.name.replace(/\s+/g, "").toLowerCase();
+      console.log(newReservation);
+      reservations.push(newReservation);
+      res.json(newReservation);
+    });
+  }
+})

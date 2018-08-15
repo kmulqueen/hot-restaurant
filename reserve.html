@@ -32,31 +32,19 @@
   </form>
 
   <script type="text/javascript">
-
-    // Question: What does this code do?
     $("#reservation-submit").on("click", function (event) {
       event.preventDefault();
       var newReservation = {
         name: $("#name-input").val().trim(),
-        phone: $("#phone-input").val().trim(),
+        phone_number: $("#phone-input").val().trim(),
         email: $("#email-input").val().trim(),
-        partyName: $("#party-name-input").val().trim()
+        party_name: $("#party-name-input").val().trim()
       };
 
-      // Question: What does this code do??
-      // if (reservations.length < 6) {
-      //   reservations.push(newReservation)
-        $.post("/api/reservations", newReservation)
-          .then(function (data) {
-            console.log("Checking reservations", data);
-          });
-      // } else {
-      //   waitList.push(newReservation)
-      //   $.post("/api/waitlist", newReservation)
-      //     .then(function (data) {
-      //       console.log("Checking waiting list", data);
-      //     });
-      // }
+      $.post("/api/reservations", newReservation)
+        .then(function (data) {
+          console.log("Checking reservations", data);
+        });
     });
   </script>
 </body>
