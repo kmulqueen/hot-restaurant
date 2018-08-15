@@ -1,24 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Reservations</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+  <title>Reservations</title>
 </head>
+
 <body>
-    <h1>Make a Reservation</h1>
-    <form action="">
-        Name:<br>
-        <input id="name-input" type="text" name="name"> <br>
-        Phone Number:<br>
-        <input id="phone-input" type="text" name="phone-number"> <br>
-        Email:<br>
-        <input  id="email-input" type="text" name="email"> <br>
-        Party Name:<br>
-        <input  id="party-name-input" type="text" name="unique-id"> <br>
-        <br><br>
-        <input id="reservation-submit" type="submit" value="Submit">
-    </form>
+  <h1>Make a Reservation</h1>
+  <form action="">
+    Name:
+    <br>
+    <input id="name-input" type="text" name="name">
+    <br> Phone Number:
+    <br>
+    <input id="phone-input" type="text" name="phone-number">
+    <br> Email:
+    <br>
+    <input id="email-input" type="text" name="email">
+    <br> Party Name:
+    <br>
+    <input id="party-name-input" type="text" name="unique-id">
+    <br>
+    <br>
+    <br>
+    <input id="reservation-submit" type="submit" value="Submit">
+  </form>
+
+  <script type="text/javascript">
+
+    // Question: What does this code do?
+    $("#reservation-submit").on("click", function (event) {
+      event.preventDefault();
+      var newReservation = {
+        name: $("#name-input").val().trim(),
+        phone: $("#phone-input").val().trim(),
+        email: $("#email-input").val().trim(),
+        partyName: $("#party-name-input").val().trim()
+      };
+
+      // Question: What does this code do??
+      // if (reservations.length < 6) {
+      //   reservations.push(newReservation)
+        $.post("/api/reservations", newReservation)
+          .then(function (data) {
+            console.log("Checking reservations", data);
+          });
+      // } else {
+      //   waitList.push(newReservation)
+      //   $.post("/api/waitlist", newReservation)
+      //     .then(function (data) {
+      //       console.log("Checking waiting list", data);
+      //     });
+      // }
+    });
+  </script>
 </body>
+
 </html>
